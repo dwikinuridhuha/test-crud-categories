@@ -36,8 +36,8 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>Detail:</strong>
-                    <textarea class="form-control" style="height:150px" name="is_publish" placeholder="is_publish">{{ $category->is_publish }}</textarea>
+                    <strong>is_publish:</strong>
+                    <input type="checkbox" name="is_publish" checked="{{ $category->is_publish }}" />
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">

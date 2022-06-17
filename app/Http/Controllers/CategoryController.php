@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 class CategoryController extends Controller
 {
     /**
@@ -16,8 +18,30 @@ class CategoryController extends Controller
     {
         $categories = Category::latest()->paginate(5);
 
-        return view('categories.index',compact('$categories'))
+        return view('categories.index',compact('categories'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        // menangkap data pencarian
+        $cari = $request->cari;
+
+        // mengambil data dari table pegawai sesuai pencarian data
+        $categories = DB::table('categories')
+            ->where('name','like',"%".$cari."%")
+            ->paginate(5);
+
+        // mengirim data pegawai ke view index
+//        return view('categories.index',['categories' => $hasilCari]);
+        return view('categories.index',compact('categories'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
+
     }
 
     /**
@@ -40,8 +64,13 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'is_publish' => 'required',
         ]);
+
+        if($request['is_publish'] == "on") {
+            $request['is_publish'] = true;
+        } else {
+            $request['is_publish'] = false;
+        }
 
         Category::create($request->all());
 
@@ -82,8 +111,13 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'is_publish' => 'required',
         ]);
+
+        if($request['is_publish'] == "on") {
+            $request['is_publish'] = true;
+        } else {
+            $request['is_publish'] = false;
+        }
 
         $category->update($request->all());
 
